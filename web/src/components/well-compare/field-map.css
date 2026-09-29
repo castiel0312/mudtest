@@ -1,0 +1,200 @@
+/* ── Field Map panel ── */
+
+.wcp-map {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Tile + SVG overlay container */
+.wcp-map-stage {
+  position: relative;
+  width: 100%;
+  /* 4:3 aspect; overridden to fill remaining panel height on tall viewports */
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #0b1220; /* dark fallback while tiles load or when unavailable */
+}
+
+/* Individual tile images are positioned absolutely by FieldMap.tsx */
+.wcp-map-tile {
+  position: absolute;
+  image-rendering: auto;
+  /* tiles that fail to load simply stay transparent – dark bg shows through */
+}
+
+/* SVG overlay fills the stage exactly */
+.wcp-map-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* Well dot – base style; colour driven by fill/stroke props on the element */
+.wcp-map-dot {
+  pointer-events: all;
+  cursor: default;
+}
+
+/* Pulsing ring around the reference well */
+.wcp-map-pulse {
+  fill: none;
+  stroke: var(--wcp-accent);
+  stroke-width: 1.5;
+  pointer-events: none;
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: wcp-map-pulse 2s ease-out infinite;
+}
+
+@keyframes wcp-map-pulse {
+  0%   { r: 7px;  opacity: .9; }
+  100% { r: 18px; opacity: 0; }
+}
+
+/* Well name labels */
+.wcp-map-label {
+  fill: #e6edf7;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 8px;
+  pointer-events: none;
+  text-shadow: 0 1px 3px #000;
+  paint-order: stroke fill;
+  stroke: #000;
+  stroke-width: 2px;
+  stroke-linejoin: round;
+}
+
+/* North arrow group */
+.wcp-map-north {
+  fill: none;
+  stroke: #e6edf7;
+  stroke-linecap: round;
+  stroke-width: 1.4;
+}
+.wcp-map-north-letter {
+  fill: #e6edf7;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+}
+
+/* Scale bar */
+.wcp-map-scalebar {
+  fill: none;
+  stroke: #e6edf7;
+  stroke-linecap: round;
+  stroke-width: 1.4;
+}
+.wcp-map-scalelabel {
+  fill: #e6edf7;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 8px;
+  paint-order: stroke fill;
+  stroke: #000;
+  stroke-width: 2px;
+  stroke-linejoin: round;
+}
+
+/* Zoom controls */
+.wcp-map-controls {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 2;
+}
+
+.wcp-map-zoom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid rgba(255 255 255 / .25);
+  border-radius: 4px;
+  background: rgba(11 18 32 / .82);
+  color: #e6edf7;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1;
+  backdrop-filter: blur(4px);
+  transition: background 0.15s;
+}
+.wcp-map-zoom:hover:not(:disabled) {
+  background: rgba(47 123 255 / .35);
+}
+.wcp-map-zoom:disabled {
+  opacity: .35;
+  cursor: default;
+}
+
+/* Attribution strip */
+.wcp-map-attribution {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 2px 5px;
+  background: rgba(0 0 0 / .55);
+  color: #c8d4e8;
+  font-size: 7px;
+  pointer-events: none;
+  border-top-left-radius: 3px;
+}
+
+/* "Unavailable" overlay when reference has no coordinates */
+.wcp-map-unavailable {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: #8fa0bc;
+  font-size: 11px;
+  text-align: center;
+}
+.wcp-map-unavailable strong {
+  color: #e6edf7;
+  font-size: 13px;
+}
+.wcp-map-unavailable small {
+  font-size: 9px;
+  color: #8fa0bc;
+}
+
+/* Footer note: wells without coordinates */
+.wcp-map-footnote {
+  color: #8fa0bc;
+  font-size: 8px;
+}
+
+/* Legend row reused from panel styles, scoped here for map-specific items */
+.wcp-map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+}
+.wcp-map-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #e6edf7;
+  font-size: 8px;
+}
+.wcp-map-legend-dot {
+  flex: 0 0 auto;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255 255 255 / .5);
+}
